@@ -1,0 +1,45 @@
+version: '2'
+
+services:
+  00-unzip:
+    image: "yareddej/ew-shopp-00-unzip:latest"
+    environment: 
+      - STEP_NAME=00-unzip
+      - KUBEMQ_HOST=kubemq
+    volumes:
+      - /bigdata/yared-experiment/00-unzip/input:/in
+      - /bigdata/yared-experiment/00-unzip/work:/work
+      - /bigdata/yared-experiment/00-unzip/output:/out
+      - /bigdata/yared-experiment/00-unzip/sandbox:/sandbox
+    networks: 
+     -  ebw-shopp-ntk
+    command: 
+      - '30'
+      - /sandbox
+      - /code
+      - /in
+      - /work
+      - /out
+      - '-'
+      - 'MQ1'
+
+  kubemq:
+    image: kubemq/kubemq:latest
+    container_name: kubemq
+    ports:
+      - "8080:8080"
+      - "9090:9090"
+      - "50000:50000"
+    environment:
+      - KUBEMQ_HOST=kubemq
+      - KUBEMQ_TOKEN="8297ae1b-d2bc-40b4-bf95-39a67162984d"
+    networks: 
+      -  ebw-shopp-ntk
+    volumes:
+      - kubemq_vol:/store
+
+networks:
+  ebw-shopp-ntk:
+    driver: bridge 
+volumes:
+  kubemq_vol:
