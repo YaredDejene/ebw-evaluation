@@ -11,10 +11,8 @@ services:
       - /bigdata/yared-experiment/00-unzip/work:/work
       - /bigdata/yared-experiment/00-unzip/output:/out
       - /bigdata/yared-experiment/00-unzip/sandbox:/sandbox
-    networks: 
-     -  ebw-shopp-ntk
     command: 
-      - '30'
+      - '10'
       - /sandbox
       - /code
       - /in
@@ -22,6 +20,26 @@ services:
       - /out
       - '-'
       - 'MQ1'
+
+  01-tsv2csv:
+    image: "yareddej/ew-shopp-01-tsv2csv:latest"
+    environment: 
+      - STEP_NAME=01-tsv2csv
+      - KUBEMQ_HOST=kubemq
+    volumes:
+      - /bigdata/yared-experiment/00-unzip/output:/in
+      - /bigdata/yared-experiment/01-tsv2csv/work:/work
+      - /bigdata/yared-experiment/01-tsv2csv/output:/out
+      - /bigdata/yared-experiment/01-tsv2csv/sandbox:/sandbox
+    command: 
+      - '10'
+      - /sandbox
+      - /code
+      - /in
+      - /work
+      - /out
+      - 'MQ1'
+      - 'MQ2'
 
   kubemq:
     image: kubemq/kubemq:latest
@@ -33,13 +51,8 @@ services:
     environment:
       - KUBEMQ_HOST=kubemq
       - KUBEMQ_TOKEN="8297ae1b-d2bc-40b4-bf95-39a67162984d"
-    networks: 
-      -  ebw-shopp-ntk
     volumes:
       - kubemq_vol:/store
 
-networks:
-  ebw-shopp-ntk:
-    driver: bridge 
 volumes:
   kubemq_vol:
