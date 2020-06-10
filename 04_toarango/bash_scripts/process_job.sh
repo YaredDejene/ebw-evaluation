@@ -48,7 +48,7 @@ node \
 log_info "Done transforming a csv file ${file_name} into arango graph" ${file_name} "$0"
 
 # Move the files to output and write the new url to the message queue
-${code_directory}/move_to_output.sh ${code_directory} ${mq_write} ${output_directory} ${work_path_results}* \
+${code_directory}/move_to_output.sh ${code_directory} ${mq_write} ${output_directory} ${work_path_results}/* \
     || handle_error "Error occured while moving a tranformed file into output directory" "${file_name}" "$0" "$LINENO"
 
 echo '   Done'

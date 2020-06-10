@@ -6,6 +6,7 @@ services:
     environment: 
       - STEP_NAME=00-unzip
       - KUBEMQ_HOST=kubemq
+      - LOG_JOBS=1
     volumes:
       - /bigdata/yared-experiment/00-unzip/input:/in
       - /bigdata/yared-experiment/00-unzip/work:/work
@@ -26,6 +27,7 @@ services:
     environment: 
       - STEP_NAME=01-tsv2csv
       - KUBEMQ_HOST=kubemq
+      - LOG_JOBS=1
     volumes:
       - /bigdata/yared-experiment/00-unzip/output:/in
       - /bigdata/yared-experiment/01-tsv2csv/work:/work
@@ -46,6 +48,7 @@ services:
     environment: 
       - STEP_NAME=02-split
       - KUBEMQ_HOST=kubemq
+      - LOG_JOBS=1
     volumes:
       - /bigdata/yared-experiment/01-tsv2csv/output:/in
       - /bigdata/yared-experiment/02-split/work:/work
@@ -66,6 +69,7 @@ services:
     environment: 
       - STEP_NAME=03-transform
       - KUBEMQ_HOST=kubemq
+      - LOG_JOBS=1
     volumes:
       - /bigdata/yared-experiment/02-split/output:/in
       - /bigdata/yared-experiment/03-transform/work:/work
@@ -88,6 +92,7 @@ services:
     environment: 
       - STEP_NAME=04-toarango
       - KUBEMQ_HOST=kubemq
+      - LOG_JOBS=1
     volumes:
       - /bigdata/yared-experiment/03-transform/output:/in
       - /bigdata/yared-experiment/04-toarango/work:/work

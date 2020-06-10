@@ -88,9 +88,23 @@ if [ -n "${file_name}" ]; then
         log_info "File moved to workspace" "${file_name}" "$0"
         
         # Run the job 
-        ${process_job} "${work_path}" "$@" 
+        if [ "${LOG_JOBS}" -eq "1" ]; then
+            log_directory=${work_directory}/logs
+            mkdir -p $log_directory
 
-        retn_code=$?
+            start_process=$(date --utc +%FT%TZ)
+            ${process_job} "${work_path}" "$@"
+            retn_code=$?
+            end_process=$(date --utc +%FT%TZ)
+
+            # Append to common log file
+	        ${code_directory}/append_to_log_common.sh "${log_directory}" "${start_process}" "${end_process}" ${file_name} 
+
+        else 
+            ${process_job} "${work_path}" "$@"
+            retn_code=$?
+        fi
+        
         if [ ${retn_code} -ne 0 ]; then
 
             # check if the file been sandboxed before 
