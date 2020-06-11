@@ -26,7 +26,8 @@ echo '#'
 # Construct Paths
 file_name=${work_path##*/}
 file_name_no_ext=${file_name%.*}
-work_path_results=${work_directory}/results
+temp_work_directory=${work_directory}/${file_name_no_ext}
+work_path_results=${temp_work_directory}/results
 
 
 # Debug: Show Paths
@@ -34,22 +35,31 @@ echo "!! work_path_results", ${work_path_results}
 log_info "Started transforming a csv file ${file_name} to Arango-DB values" ${file_name} "$0" 
 
 # Making Results Directory
+mkdir -p ${temp_work_directory}
 mkdir -p ${work_path_results}
 
 # Transforming
 echo "   Transforming to Arango Graph"
-cd ${work_directory}
+cd ${temp_work_directory}
 node \
     /code/Datagraft-RDF-to-Arango-DB/transformscript.js \
     -t ${transformation_json_full_path} \
     -f ${work_path} \
     || handle_error "Error while transforming a file: ${file_name} into arango graph" "${file_name}" "$0" "$LINENO"
 
+# back to root directory 
+cd /
+
 log_info "Done transforming a csv file ${file_name} into arango graph" ${file_name} "$0"
 
 # Move the files to output and write the new url to the message queue
 ${code_directory}/move_to_output.sh ${code_directory} ${mq_write} ${output_directory} ${work_path_results}/* \
     || handle_error "Error occured while moving a tranformed file into output directory" "${file_name}" "$0" "$LINENO"
+
+
+# Cleanup
+rm -rf $temp_work_directory
+log_info "Removed temporary working directory: ${temp_work_directory}" ${file_name} "$0"
 
 echo '   Done'
 

@@ -3,6 +3,8 @@ version: '2'
 services:
   00-unzip:
     image: "yareddej/ew-shopp-00-unzip:latest"
+    depends_on:
+      - kubemq
     stdin_open: true
     environment: 
       - STEP_NAME=00-unzip
@@ -29,6 +31,8 @@ services:
 
   01-tsv2csv:
     image: "yareddej/ew-shopp-01-tsv2csv:latest"
+    depends_on:
+      - kubemq
     stdin_open: true
     environment: 
       - STEP_NAME=01-tsv2csv
@@ -55,6 +59,8 @@ services:
   
   02-split:
     image: "yareddej/ew-shopp-02-split:latest"
+    depends_on:
+      - kubemq
     stdin_open: true
     environment: 
       - STEP_NAME=02-split
@@ -81,6 +87,8 @@ services:
 
   03-transform:
     image: "yareddej/ew-shopp-03-transform:latest"
+    depends_on:
+      - kubemq
     stdin_open: true
     tty: true
     cpuset: '1'
@@ -113,6 +121,8 @@ services:
 
   04-toarango:
     image: "yareddej/ew-shopp-04-toarango:latest"
+    depends_on:
+      - kubemq
     stdin_open: true
     tty: true
     cpuset: '1'
