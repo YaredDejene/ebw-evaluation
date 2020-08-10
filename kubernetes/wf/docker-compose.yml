@@ -72,9 +72,6 @@ services:
 
   03-transform:
     image: "yareddej/ew-shopp-03-transform:latest"
-    mem_limit: 4g   
-    mem_reservation: 5g
-    cpuset: 0-3
     depends_on:
       - kubemq
     environment: 

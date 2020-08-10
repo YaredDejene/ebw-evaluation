@@ -91,9 +91,9 @@ services:
       - kubemq
     stdin_open: true
     tty: true
-    cpuset: '1'
-    mem_limit: 4404019200
-    mem_reservation: 4351590400
+    mem_limit: 5g     
+    mem_reservation: 4g
+    cpuset: 0-3
     environment: 
       - STEP_NAME=03-transform
       - KUBEMQ_HOST=kubemq

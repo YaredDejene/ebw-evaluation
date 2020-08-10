@@ -54,12 +54,17 @@ while :; do
     
     retn_code=$?
     if [ ${retn_code} -eq 0 ]; then
-        # File processed ... try next  
+        # File processed ... try next          
         echo "File processed successfully"
     else
-        # No file processed ... wait
-        sleep ${frequency}     
+        if [ ${frequency} -gt 0 ]; then
+            # No file processed ... wait
+            sleep ${frequency}     
+        else
+            # Exit loop if frequency is not provided
+            echo "Exit from main loop, no frequency provided"
+            break
+        fi
     fi
 
 done
-
